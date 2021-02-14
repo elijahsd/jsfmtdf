@@ -41,7 +41,7 @@ javascript:(function() {
 	class Rules {
 	}
 
-	_pj.set_properties(Rules, {"brackets": "[]{}()", "f": ["def", "class"], "fields": ".", "letters": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", "numbers": "0123456789", "one_line_comment": "#", "ops": "=+-*@/%&|^<>:!~\\", "reserved": ["pass", "break", "continue", "global", "nonlocal", "assert", "del", "import", "from", "as", "if", "elif", "else", "while", "for", "in", "with", "try", "except", "finally", "return", "raise", "def", "class", "lambda", "or", "and", "not", "yield"], "spaces": [" ", "\t"], "treated_as_text": "_,.;", "values": ["True", "False", "None"]});
+	_pj.set_properties(Rules, {"brackets": "[]{}()", "f": ["def", "class"], "fields": ".,;", "letters": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", "numbers": "0123456789", "one_line_comment": "#", "ops": "=+-*@/%&|^<>:!~\\", "reserved": ["pass", "break", "continue", "global", "nonlocal", "assert", "del", "import", "from", "as", "if", "elif", "else", "while", "for", "in", "with", "try", "except", "finally", "return", "raise", "def", "class", "lambda", "or", "and", "not", "yield"], "spaces": [" ", "\t"], "treated_as_text": "_", "values": ["True", "False", "None"]});
 
 	class Parser {
 		constructor(text, rules) {
@@ -52,7 +52,7 @@ javascript:(function() {
 			this.fname = false;
 			this.rules = rules;
 			this.text = text;
-			this.parsers = ["parse_br", "parse_space", "parse_comment", "parse_string", "parse_number", "parse_bracket", "parse_operator", "parse_text"];
+			this.parsers = ["parse_br", "parse_space", "parse_comment", "parse_string", "parse_number", "parse_bracket", "parse_operator", "parse_field", "parse_text"];
 		}
 
 		get_symbol() {
@@ -192,19 +192,23 @@ javascript:(function() {
 			}
 			return [false, "", "", false];
 		}
-	
+
 		parse_number() {
 			return this.parse_symbols(this.rules.numbers, "number");
 		}
-	
+
 		parse_bracket() {
 			return this.parse_symbols(this.rules.brackets, "bracket");
 		}
-	
+
 		parse_operator() {
 			return this.parse_symbols(this.rules.ops, "operator");
 		}
-	
+
+		parse_field() {
+			return this.parse_symbols(this.rules.fields, "field");
+		}
+
 		bracket_follow() {
 			var forw, found, sym;
 			forw = 0;
@@ -236,11 +240,6 @@ javascript:(function() {
 			while (((sym !== "") && ((_pj.in_es6(sym, this.rules.letters) || _pj.in_es6(sym, this.rules.numbers)) || _pj.in_es6(sym, this.rules.treated_as_text)))) {
 				buf = buf.concat(sym);
 				sym = this.get_symbol();
-				if (_pj.in_es6(sym, this.rules.fields)) {
-					buf = buf.concat(sym);
-					sym = this.get_symbol();
-					break;
-				}
 			}
 			this.push_back(sym);
 			if ((buf.length > 0)) {
@@ -310,7 +309,7 @@ javascript:(function() {
 	function fmt(f) {
 		f = f.replace(/\n\n/g, "\n");
 		var fmtr, palette, rules;
-		palette = {"none": "", "text": "rgb(240, 240, 240)", "comment": "rgb(130, 130, 130)", "string": "rgb(50, 120, 0)", "function": "rgb(50, 50, 200)", "reserved": "rgb(150, 50, 50)", "operator": "rgb(150, 150, 50)", "call": "rgb(100, 100, 220)", "bracket": "rgb(100, 100, 200)", "number": "rgb(200, 50, 50)"};
+		palette = {"none": "", "text": "rgb(40, 40, 40)", "comment": "rgb(130, 130, 130)", "string": "rgb(50, 120, 0)", "function": "rgb(50, 50, 200)", "reserved": "rgb(150, 50, 50)", "operator": "rgb(150, 150, 50)", "call": "rgb(100, 100, 220)", "bracket": "rgb(100, 100, 200)", "number": "rgb(200, 50, 50)", "field": ""};
 		rules = new Rules();
 		fmtr = new Pyfmtdf(palette, rules);
 		return fmtr.doformat(f);
