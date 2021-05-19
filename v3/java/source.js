@@ -42,10 +42,10 @@ javascript:(function() {
 
 	palette = {"none": "", "text": "rgb(40, 40, 40)", "comment": "rgb(130, 130, 130)", "string": "rgb(50, 120, 0)", "function": "rgb(50, 50, 200)", "value": "rgb(50, 50, 200)", "reserved": "rgb(150, 50, 50)", "operator": "rgb(150, 150, 50)", "call": "rgb(100, 100, 220)", "bracket": "rgb(100, 100, 200)", "number": "rgb(200, 50, 50)", "field": ""};
 
-	class rules {
+	class Rules {
 	}
 
-	_pj.set_properties(rules, {"brackets": "[]{}();", "comment": [["//", "\n", ""], ["/*", "*/", ""]], "comment_string": [], "f": ["class", "package", "extends", "implements"], "fields": ".,", "highlight": ["function"], "numbers": "0123456789", "ops": "=+-*/%&|^<>?:!~\\", "reserved": ["abstract", "class", "continue", "for", "new", "switch", "assert", "default", "goto", "synchronized", "do", "if", "private", "break", "implements", "package", "protected", "throw", "else", "import", "public", "throws", "case", "instanceof", "return", "transient", "catch", "extends", "try", "final", "interface", "static", "finally", "strictfp", "native", "super", "while"], "spaces": [" ", "\t"], "string": [["\"", "\"", "\\"], ["'", "'", "\\"]], "text": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_@", "values": ["true", "false", "null", "boolean", "this", "double", "byte", "enum", "int", "short", "char", "var", "long", "void", "const", "float", "volatile"]});
+	_pj.set_properties(Rules, {"brackets": "[]{}();", "comment": [["//", "\n", ""], ["/*", "*/", ""]], "comment_string": [], "f": ["class", "package", "extends", "implements"], "fields": ".,", "highlight": ["function"], "numbers": "0123456789", "ops": "=+-*/%&|^<>?:!~\\", "reserved": ["abstract", "class", "continue", "for", "new", "switch", "assert", "default", "goto", "synchronized", "do", "if", "private", "break", "implements", "package", "protected", "throw", "else", "import", "public", "throws", "case", "instanceof", "return", "transient", "catch", "extends", "try", "final", "interface", "static", "finally", "strictfp", "native", "super", "while"], "spaces": [" ", "\t"], "string": [["\"", "\"", "\\"], ["'", "'", "\\"]], "text": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_@", "values": ["true", "false", "null", "boolean", "this", "double", "byte", "enum", "int", "short", "char", "var", "long", "void", "const", "float", "volatile"]});
 
 	class Formatter {
 		constructor(palette) {
@@ -282,7 +282,7 @@ javascript:(function() {
 						if (_pj.in_es6(buf, this.rules.values)) {
 							t = "value";
 						} else {
-							if (((buf[0].isalpha() || (buf[0] === "_")) && this.bracket_follow())) {
+							if (((_pj.in_es6(buf[0], this.rules.text)) && this.bracket_follow())) {
 								t = "call";
 							}
 						}
@@ -317,7 +317,7 @@ javascript:(function() {
 			var bold, buf, etype, fmt, item, prs;
 			fmt = new Formatter(this.palette);
 			prs = new Parser(f, this.rules);
-			buf = fmt.start();
+			buf = "";
 			while (true) {
 				[item, etype, bold] = prs.get_next();
 				if ((item === "")) {
@@ -325,14 +325,12 @@ javascript:(function() {
 				}
 				buf = buf.concat(fmt.format(item, etype, bold));
 			}
-			buf = buf.concat(fmt.end());
 			return buf;
 		}
 	}
 
 	function fmt(f) {
-		f = f.replace(/\n\n/g, "\n");
-		var fmtr, palette, rules;
+		var fmtr, rules;
 		rules = new Rules();
 		fmtr = new Pyfmtdf(palette, rules);
 		return fmtr.doformat(f);
