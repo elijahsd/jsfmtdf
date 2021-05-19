@@ -42,12 +42,12 @@ javascript:(function() {
 
 	palette = {"none": "", "text": "rgb(40, 40, 40)", "comment": "rgb(130, 130, 130)", "string": "rgb(50, 120, 0)", "function": "rgb(50, 50, 200)", "value": "rgb(50, 50, 200)", "reserved": "rgb(150, 50, 50)", "operator": "rgb(150, 150, 50)", "call": "rgb(100, 100, 220)", "bracket": "rgb(100, 100, 200)", "number": "rgb(200, 50, 50)", "field": ""};
 
-	class rules extends object {
+	class rules {
 	}
 
 	_pj.set_properties(rules, {"brackets": "[]{}();", "comment": [["//", "\n", ""], ["/*", "*/", ""]], "comment_string": [], "f": ["class", "package", "extends", "implements"], "fields": ".,", "highlight": ["function"], "numbers": "0123456789", "ops": "=+-*/%&|^<>?:!~\\", "reserved": ["abstract", "class", "continue", "for", "new", "switch", "assert", "default", "goto", "synchronized", "do", "if", "private", "break", "implements", "package", "protected", "throw", "else", "import", "public", "throws", "case", "instanceof", "return", "transient", "catch", "extends", "try", "final", "interface", "static", "finally", "strictfp", "native", "super", "while"], "spaces": [" ", "\t"], "string": [["\"", "\"", "\\"], ["'", "'", "\\"]], "text": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_@", "values": ["true", "false", "null", "boolean", "this", "double", "byte", "enum", "int", "short", "char", "var", "long", "void", "const", "float", "volatile"]});
 
-	class Formatter extends object {
+	class Formatter {
 		constructor(palette) {
 			this.palette = palette;
 		}
@@ -75,7 +75,7 @@ javascript:(function() {
 		}
 	}
 
-	class Parser extends object {
+	class Parser {
 		constructor(text, rules) {
 			this.position = 0;
 			this.comment = null;
@@ -319,7 +319,7 @@ javascript:(function() {
 		}
 	}
 
-	class Pyfmtdf extends object {
+	class Pyfmtdf {
 		constructor(palette, rules) {
 			this.palette = palette;
 			this.rules = rules;
