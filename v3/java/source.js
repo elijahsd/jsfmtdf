@@ -73,7 +73,6 @@ javascript:(function() {
 		constructor(text, rules) {
 			this.position = 0;
 			this.comment = null;
-			this.new_line = true;
 			this.fname = false;
 			this.rules = rules;
 			this.overflow = false;
@@ -103,7 +102,6 @@ javascript:(function() {
 			var sym;
 			sym = this.get_symbols();
 			if ((sym === "\n")) {
-				this.new_line = true;
 				return [true, "<br>", "none"];
 			}
 			this.push_back();
@@ -111,19 +109,14 @@ javascript:(function() {
 		}
 
 		parse_space() {
-			var buf, sp, sym;
-			sp = "&nbsp;";
-			if ((! this.new_line)) {
-				sp = " ";
-			}
-			this.new_line = false;
+			var buf, sym;
 			sym = this.get_symbols();
 			buf = "";
-			while (((sym === " ") || (sym === "\t"))) {
+			while (((sym === " ") || (sym === String.fromCharCode(160)))) {
 				if ((sym === " ")) {
-					buf = "{}{}".format(buf, sp);
+					buf = buf.concat(" ");
 				} else {
-					buf = "{}{}{}{}{}".format(buf, sp, sp, sp, sp);
+					buf = buf.concat("&nbsp;");
 				}
 				sym = this.get_symbols();
 			}
@@ -158,13 +151,13 @@ javascript:(function() {
 				this.comment = boundaries;
 			}
 			buf = "";
-			buf += syms;
+			buf = buf.concat(syms);
 			sym = this.get_symbols();
 			while ((sym !== "")) {
 				if (((sym === "\n") && (end !== "\n"))) {
 					break;
 				}
-				buf += sym;
+				buf = buf.concat(sym);
 				sym = this.get_symbols();
 				if ((buf.length < ((start.length * (((! multiline) && 1) || 0)) + end.length))) {
 					continue;
@@ -218,7 +211,7 @@ javascript:(function() {
 			sym = this.get_symbols();
 			buf = "";
 			while (((sym !== "") && _pj.in_es6(sym, symbols))) {
-				buf = "{}{}".format(buf, sym);
+				buf = buf.concat(sym);
 				sym = this.get_symbols();
 			}
 			this.push_back();
@@ -274,7 +267,7 @@ javascript:(function() {
 			func = this.fname;
 			this.fname = false;
 			while (((sym !== "") && (_pj.in_es6(sym, this.rules.text) || (func && _pj.in_es6(sym, this.rules.fields))))) {
-				buf = "{}{}".format(buf, sym);
+				buf = buf.concat(sym);
 				sym = this.get_symbols();
 			}
 			this.push_back();
@@ -300,6 +293,7 @@ javascript:(function() {
 			}
 			return [false, "", ""];
 		}
+
 		get_next() {
 			var e, res, t;
 			for (var f, _pj_c = 0, _pj_a = this.parsers, _pj_b = _pj_a.length; (_pj_c < _pj_b); _pj_c += 1) {
