@@ -312,6 +312,7 @@ javascript:(function() {
 			this.palette = palette;
 			this.rules = rules;
 		}
+
 		doformat(f) {
 			var bold, buf, etype, fmt, item, prs;
 			fmt = new Formatter(this.palette);
@@ -322,9 +323,9 @@ javascript:(function() {
 				if ((item === "")) {
 					break;
 				}
-				buf = "{}{}".format(buf, fmt.format(item, etype, bold));
+				buf = buf.concat(fmt.format(item, etype, bold));
 			}
-			buf = "{}{}".format(buf, fmt.end());
+			buf = buf.concat(fmt.end());
 			return buf;
 		}
 	}
