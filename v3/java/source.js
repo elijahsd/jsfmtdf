@@ -52,14 +52,6 @@ javascript:(function() {
 			this.palette = palette;
 		}
 
-		start() {
-			return "<pre>";
-		}
-
-		end() {
-			return "</pre>";
-		}
-
 		esc(text) {
 			text = text.replace("&", "&amp;");
 			text = text.replace("<", "&lt;");
@@ -71,7 +63,9 @@ javascript:(function() {
 			if ((this.palette[entity] === "")) {
 				return text;
 			}
-			return "<span class=\"\" style=\"color: {};\">{}{}{}</span>".format(this.palette[entity], ((bold && "<b>") || ""), this.esc(text), ((bold && "</b>") || ""));
+			var result = "";
+			result = result.concat("<span class=\"\" style=\"color: ", this.palette[entity], ";\">", ((bold && "<b>") || ""), this.esc(text), ((bold && "</b>") || ""), "</span>");
+			return result;
 		}
 	}
 
