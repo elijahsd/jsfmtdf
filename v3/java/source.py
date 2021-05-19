@@ -82,8 +82,7 @@ class Parser(object):
             "parse_text",              # text
         ]
 
-        with open(text, 'r') as content_file:
-            self.text = content_file.read()
+        self.text = text
 
     def get_symbols(self, count = 1):
         if len(self.text) == self.position:
