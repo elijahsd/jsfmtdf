@@ -330,6 +330,7 @@ javascript:(function() {
 	}
 
 	function fmt(f) {
+		f = f.replace(/\n\n/g, "\n");
 		var fmtr, rules;
 		rules = new Rules();
 		fmtr = new Pyfmtdf(palette, rules);
